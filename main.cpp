@@ -27,21 +27,30 @@ bool testarCriacaoRede() {
         sucesso = false;
     }
     
-    // Verifica número de neurônios em cada layer
-    if(estrutura.layers[0].neuronios.size() != 3) {  // Layer de entrada
-        std::cout << "Número incorreto de neurônios no layer de entrada" << std::endl;
+    // Verifica número de neurônios em cada layer (incluindo bias)
+    if(estrutura.layers[0].neuronios.size() != 4) {  // Layer de entrada (3 + 1 bias)
+        std::cout << "Número incorreto de neurônios no layer de entrada: " << estrutura.layers[0].neuronios.size() << " (esperado 4)" << std::endl;
         sucesso = false;
     }
     
-    if(estrutura.layers[1].neuronios.size() != 3 ||  // Primeiro layer oculto
-       estrutura.layers[2].neuronios.size() != 3) {  // Segundo layer oculto
+    if(estrutura.layers[1].neuronios.size() != 4 ||  // Primeiro layer oculto (3 + 1 bias)
+       estrutura.layers[2].neuronios.size() != 4) {  // Segundo layer oculto (3 + 1 bias)
         std::cout << "Número incorreto de neurônios nos layers ocultos" << std::endl;
         sucesso = false;
     }
     
-    if(estrutura.layers[3].neuronios.size() != 2) {  // Layer de saída
+    if(estrutura.layers[3].neuronios.size() != 2) {  // Layer de saída (sem bias)
         std::cout << "Número incorreto de neurônios no layer de saída" << std::endl;
         sucesso = false;
+    }
+
+    // Verifica se os neurônios bias têm valor 1.0
+    for(size_t l = 0; l < estrutura.layers.size() - 1; l++) {  // -1 para não verificar o layer de saída
+        double valorBias = estrutura.layers[l].neuronios.back().valor;
+        if(valorBias != 1.0) {
+            std::cout << "Valor incorreto do neurônio bias no layer " << l << ": " << valorBias << " (esperado 1.0)" << std::endl;
+            sucesso = false;
+        }
     }
     
     return sucesso;
@@ -87,6 +96,15 @@ bool testarModificacaoPesos() {
     
     for(size_t l = 1; l < estruturaModificada.layers.size(); l++) {
         for(size_t n = 0; n < estruturaModificada.layers[l].neuronios.size(); n++) {
+            // Verifica se o neurônio bias manteve seu valor como 1.0
+            if(l < estruturaModificada.layers.size() - 1 && n == estruturaModificada.layers[l].neuronios.size() - 1) {
+                if(estruturaModificada.layers[l].neuronios[n].valor != 1.0) {
+                    std::cout << "Valor do neurônio bias foi alterado incorretamente" << std::endl;
+                    sucesso = false;
+                }
+                continue;
+            }
+
             for(size_t p = 0; p < estruturaModificada.layers[l].neuronios[n].pesos.size(); p++) {
                 double pesoOriginal = estruturaOriginal.layers[l].neuronios[n].pesos[p];
                 double pesoModificado = estruturaModificada.layers[l].neuronios[n].pesos[p];
@@ -126,12 +144,20 @@ bool testarPropagacao() {
         sucesso = false;
     }
     
-    // Verifica se todos os valores dos neurônios foram zerados após a propagação
+    // Verifica se os valores dos neurônios foram zerados após a propagação (exceto bias)
     Rede estrutura = rede.getRede();
-    for(const auto& layer : estrutura.layers) {
-        for(const auto& neuronio : layer.neuronios) {
-            if(neuronio.valor != 0.0) {
-                std::cout << "Valor do neurônio não foi zerado após propagação: " << neuronio.valor << std::endl;
+    for(size_t l = 0; l < estrutura.layers.size(); l++) {
+        for(size_t n = 0; n < estrutura.layers[l].neuronios.size(); n++) {
+            double valor = estrutura.layers[l].neuronios[n].valor;
+            
+            // Se é um neurônio bias (último neurônio de cada layer, exceto o de saída)
+            bool ehBias = (l < estrutura.layers.size() - 1) && (n == estrutura.layers[l].neuronios.size() - 1);
+            
+            if(ehBias && valor != 1.0) {
+                std::cout << "Valor do neurônio bias foi alterado: " << valor << " (deveria ser 1.0)" << std::endl;
+                sucesso = false;
+            } else if(!ehBias && valor != 0.0) {
+                std::cout << "Valor do neurônio não foi zerado após propagação: " << valor << std::endl;
                 sucesso = false;
             }
         }

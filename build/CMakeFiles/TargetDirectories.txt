@@ -1,0 +1,9 @@
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/redeneural_static.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/redeneural_shared.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/teste_rede.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/edit_cache.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/rebuild_cache.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/list_install_components.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/install.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/install/local.dir
+/home/carlos/Documentos/Projetos/RedeNeuralCPP/build/CMakeFiles/install/strip.dir

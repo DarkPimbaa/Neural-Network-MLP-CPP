@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/teste_rede.dir/main.cpp.o -o teste_rede  lib/libredeneural.a 

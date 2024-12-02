@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/libredeneural.a CMakeFiles/redeneural_static.dir/redeNeural.cpp.o
+/usr/bin/ranlib lib/libredeneural.a
